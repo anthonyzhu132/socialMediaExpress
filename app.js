@@ -4,13 +4,13 @@ const port = 8080;
 const morgan = require('morgan');
 
 //Loading Routes
-const {getPosts} = require('./routes/post')
+const postRoutes = require('./routes/post')
 
 //Middleware doing something inbetween
 app.use(morgan('dev'));
 
-//Rendering Root Page
-app.get("/", getPosts);
+//Rendering Root Page using middleware
+app.use("/", postRoutes);
 
 //Listening to Port 8080
 app.listen(port, () => {
