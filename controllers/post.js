@@ -1,3 +1,10 @@
 exports.getPosts = (req, res) => {
-  res.send("Hello from the root page / using routes and controllers");
+  //Returning Information as Json format to the page instead of using re.send, which just sends blank text
+  res.json({
+    posts: [
+      {title: "First"},
+      {title: "Second"}
+    ]
+  });
 };
+
