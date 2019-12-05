@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const expressValidator = require('express-validator');
 
 dotenv.config()
 
@@ -24,6 +25,7 @@ const postRoutes = require('./routes/post')
 //Middleware doing something inbetween
 app.use(morgan('dev'));
 app.use(bodyParser.json());
+app.use(expressValidator());
 //Rendering Root Page using middleware
 app.use("/", postRoutes);
 
