@@ -1,16 +1,18 @@
 const mongoose = require('mongoose');
 
-const postSchema = new mongoose.Scheme({
+const postSchema = new mongoose.Schema({
   title: {
     type: String,
     required: "Title is required to submit",
     minlength: 4,
-    maxlength: 150,
+    maxlength: 150
   },
   body: {
     type: String,
     required: "Body is required to submit",
     minlength: 4,
-    maxlength: 150,
+    maxlength: 2000
   }
 })
+
+module.exports = mongoose.model("Post", postSchema);
