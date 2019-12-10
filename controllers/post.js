@@ -16,17 +16,10 @@ exports.createPosts = (req, res) => {
   const post = new Post(req.body)
 
   //saving the post
-  post.save((err, result) => {
-    //catching the error, if there is one and assigning it a status code with json error
-    if(err) {
-      return res.status(400).json({
-        error: err
+  post.save()
+    .then(result => {
+      res.status(200).json({
+        post: result
       })
-    }
-    //when success, display post that was just saved, and assign status code 200
-    res.status(200).json({
-      post: result
     })
-    console.log(post)
-  })
 }
