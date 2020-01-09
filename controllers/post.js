@@ -1,13 +1,11 @@
 const Post = require('../models/post')
 
 exports.getPosts = (req, res) => {
-  //Returning Information as Json format to the page instead of using re.send, which just sends blank text
-  res.json({
-    posts: [
-      {title: "First"},
-      {title: "Second"}
-    ]
-  });
+  const posts = Post.find()
+  .then((posts) => {
+    res.status(200).json({posts: posts})
+  })
+  .catch(err => console.log(err)); 
 };
 
 //Creating the post after receiving information from the frontend
