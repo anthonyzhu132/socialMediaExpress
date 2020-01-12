@@ -7,22 +7,22 @@ const userSchema = new mongoose.Schema({
     type: String,
     trim: true,
     required: true
-  },
-  email: {
+},
+email: {
     type: String,
     trim: true,
     required: true
-  },
-  hashed_password: {
+},
+hashed_password: {
     type: String,
     required: true
-  },
-  salt: String,
-  created: {
+},
+salt: String,
+created: {
     type: Date,
     default: Date.now
-  },
-  updated: Date
+},
+updated: Date
 });
 
 
@@ -44,15 +44,14 @@ userSchema.virtual('password')
 //methods for the userSchema
 userSchema.methods = {
   encryptPassword: function(password) {
-    if(!password) return "";
+    if (!password) return "";
     try {
-      //use encryption sha1 using the salt that was provided
-      return crypto.createHmac('sha1', this.salt)
-      //update password
-      .update(password)
-      .digest('hex');
-    } catch (err){
-      return "";
+        return crypto
+            .createHmac("sha1", this.salt)
+            .update(password)
+            .digest("hex");
+    } catch (err) {
+        return "";
     }
   }
 }

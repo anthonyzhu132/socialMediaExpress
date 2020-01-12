@@ -21,6 +21,7 @@ mongoose.connection.on('error', err => {
 
 //Loading Routes
 const postRoutes = require('./routes/post')
+const authRoutes = require('./routes/auth')
 
 //Middleware doing something inbetween
 app.use(morgan('dev'));
@@ -28,6 +29,7 @@ app.use(bodyParser.json());
 app.use(expressValidator());
 //Rendering Root Page using middleware
 app.use("/", postRoutes);
+app.use("/", authRoutes);
 
 //Listening to Port 8080
 app.listen(port, () => {
