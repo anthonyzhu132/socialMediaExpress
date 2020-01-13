@@ -34,4 +34,20 @@ exports.userSignupValidator = (req, res, next) => {
         min: 4,
         max: 2000
     });
+    //Check to see if password is empty
+    req.check('password', 'Password cannot be empty').notEmpty();
+    req.check('password')
+    .isLength({min: 6})
+    .withMessage("Password must contain atleast 6 characters!")
+    .matches(/\d/)
+    .withMessage("Password must contain a number");
+    //Check Errors
+    const errors = req.validationErrors();
+    // if error show the first one as they happen
+    if (errors) {
+        const firstError = errors.map(error => error.msg)[0];
+        return res.status(400).json({ error: firstError });
+    }
+    // proceed to next middleware
+    next();
 }

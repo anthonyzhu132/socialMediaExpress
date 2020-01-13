@@ -1,9 +1,9 @@
 const express = require('express')
 const { signup } = require('../controllers/auth')
 const router = express.Router()
-// const Validator = require('../Valdation');
+const { userSignupValidator } = require('../Valdation');
 
 //Posting post information from frontend to backend
-router.post('/signup', signup)
+router.post('/signup', userSignupValidator, signup);
 
 module.exports = router;
