@@ -21,3 +21,17 @@ exports.createsPostValidator = (req, res, next) => {
   // proceed to next middleware
   next();
 ;}
+
+
+exports.userSignupValidator = (req, res, next) => {
+    //Check to see if name is empty
+    req.check('name', 'Name cannot be empty').notEmpty();
+    //Check to see if email is valid
+    req.check('email', 'Email must be between 3 to 32 characters')
+    .matches(/.+\@.+\..+/)
+    .withMessage('Email must contain @')
+    .isLength({
+        min: 4,
+        max: 2000
+    });
+}
