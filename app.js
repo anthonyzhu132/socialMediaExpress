@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
-
+const cookieParser = require('cookie-parser');
 dotenv.config()
 
 
@@ -26,6 +26,7 @@ const authRoutes = require('./routes/auth')
 //Middleware doing something inbetween
 app.use(morgan('dev'));
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(expressValidator());
 //Rendering Root Page using middleware
 app.use("/", postRoutes);
