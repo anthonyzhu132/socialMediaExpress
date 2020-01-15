@@ -10,23 +10,32 @@ exports.signup = async (req, res) => {
       });
   const user = await new User(req.body);
   await user.save();
-  res.status(200).json({ message: `Signup success with name: ${user.name}, email: ${user.email}` });
+  res.status(200).json({ message: 'Signup success! Please login.' });
 };
 
 exports.signin = (req, res) => {
-  //Find the user based on the email they have provided
-  const {email, password} = req.body
-  User.findOne({email}, (err, user) => {
-    if(err || !user ) {
-      return res.status(401).json({
-        error: "User with that email does not exist"
-      })
-    }
-
-    //If user is found, authenticate user email and password
-    //Authentication method in user models
-  })
-  // if there is no user, or an error
-
-  //If there is a user, authenticate the user
-}
+  // find the user based on email
+  const { email, password } = req.body;
+  User.findOne({ email }, (err, user) => {
+      // if err or no user
+      if (err || !user) {
+          return res.status(401).json({
+              error: 'User with that email does not exist. Please signup.'
+          });
+      }
+      // if user is found make sure the email and password match
+      // create authenticate method in model and use here
+      if (!user.authenticate(password)) {
+          return res.status(401).json({
+              error: 'Email and password do not match'
+          });
+      }
+      // generate a token with user id and secret
+      const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET);
+      // persist the token as 't' in cookie with expiry date
+      res.cookie('t', token, { expire: new Date() + 9999 });
+      // retrun response with user and token to frontend client
+      const { _id, name, email, role } = user;
+      return res.json({ token, user: { _id, email, name, role, }, message: "Thank you for signing" });
+  });
+};
