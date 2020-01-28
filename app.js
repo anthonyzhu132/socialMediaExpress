@@ -29,6 +29,14 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(expressValidator());
+
+//Middleware error Handling for unauthorized access 
+app.use(function (err, req, res, next) {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).send('invalid token...');
+  }
+});
+
 //Rendering Root Page using middleware
 app.use("/", postRoutes);
 app.use("/", authRoutes);
