@@ -1,12 +1,10 @@
 const express = require('express')
-const { userById } = require('../controllers/user')
+const { userById, allUsers } = require('../controllers/user')
 
 const router = express.Router()
 
-//Posting post information from frontend to backend
-router.post('/signup', userSignupValidator, signup);
-router.post('/signin', signin);
-router.get('/signout', signout)
+//adding a route to fetch all of the users
+router.get('/users', allUsers);
 
 // any routes containing :userId, app will execute userbyid()
 router.param("userId", userById)

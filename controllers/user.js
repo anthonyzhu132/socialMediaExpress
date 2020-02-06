@@ -29,5 +29,9 @@ exports.allUsers = (req, res) => {
             })
         }
         res.json({users})
-    })
+    }).select("name email updated created")
+}
+
+exports.getuser = (req, res) => {
+    return res.json(re.profile);
 }
