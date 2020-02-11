@@ -63,8 +63,6 @@ exports.deleteUser = (req, res, next) => {
                 error: "You are not authorized to perform this action, please try again and check."
             })
         }
-        user.hashed_password = undefined;
-        user.salt = undefined;
-        res.json({user})
+        res.json({message: "User has been deleted successfully"})
     })
 }
