@@ -4,7 +4,9 @@ const fs = require('fs')
 
 exports.getPosts = (req, res) => {
   //Creating variable that finds all the posts, selects the ID, TITLE & BODY
-  const posts = Post.find().select("_id title body")
+  const posts = Post.find()
+  .populate("postedBy", "_id name")
+  .select("_id title body")
   .then((posts) => {
     res.json({ posts })
     //reponds with all the posts in JSON format
@@ -23,6 +25,9 @@ exports.createPosts = (req, res, next) => {
       })
     }
     let post = new Post(fields);
+
+    req.profile.hashed_password = undefined;
+    req.profile.salt = undefined;
     post.postedBy = req.profile;
 
     if(files.photo) {
@@ -36,7 +41,7 @@ exports.createPosts = (req, res, next) => {
           error: err
         })
       }
-      re.json(result)
+      res.json(result)
     })
   })
 };

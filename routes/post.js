@@ -9,7 +9,7 @@ const { userById } = require('../controllers/user')
 router.get('/', getPosts)
 
 //Posting post information from frontend to backend
-router.post('/post', requireSignin ,createsPostValidator, createPosts)
+router.post('/post/new/:userId', requireSignin, createPosts, createsPostValidator)
 
 // any routes containing :userId, app will execute userbyid()
 router.param("userId", userById)
