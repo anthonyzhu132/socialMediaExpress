@@ -45,3 +45,8 @@ exports.createPosts = (req, res, next) => {
     })
   })
 };
+
+exports.postsByUser = (req, res) => {
+  Post.find({postedBy: req.profile._id})
+    .populate("postedBy", "_id name")
+}
