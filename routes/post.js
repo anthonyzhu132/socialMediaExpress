@@ -2,7 +2,7 @@ const express = require('express')
 const {getPosts, createPosts, postsByUser, postById, isPoster, deletePost} = require('../controllers/post')
 const router = express.Router()
 const { requireSignin } = require('../controllers/auth')
-const { createsPostValidator } = require('../Validation');
+const { createsPostValidator } = require('../Valdation');
 const { userById } = require('../controllers/user')
 
 //Loading root page and getting posts

@@ -81,4 +81,16 @@ exports.isPoster = (req, res, next) => {
   next()
 }
 
-
+exports.deletePost = (req, res) => {
+  let post = req.post;
+  post.remove((err, post) => {
+    if(err) {
+      return res.status(400).json({
+        error:err
+      })
+    }
+    res.json({
+      message: "Post has been deleted successfully"
+    })
+  })
+}
