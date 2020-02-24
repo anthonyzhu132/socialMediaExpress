@@ -60,6 +60,7 @@ exports.createPosts = (req, res, next) => {
 };
 
 exports.postsByUser = (req, res) => {
+  console.log(Post.find())
   Post.find({postedBy: req.profile._id})
     .populate("postedBy", "_id name")
     .sort("_created")
@@ -72,25 +73,29 @@ exports.postsByUser = (req, res) => {
 }
 
 exports.isPoster = (req, res, next) => {
-  let isPoster = req.post && req.auth  && req.post.postedBy._id === req.auth._id
-  if(!isPoster) {
-    return res.status(403).json({
-      error: "User is not authorized to perform action"
-    })
+   let sameUser = req.profile && req.auth && req.profile.toString() === req.auth.toString();
+
+  let isPoster = sameUser;
+
+  if (!isPoster) {
+      return res.status(403).json({
+          error: 'User is not authorized'
+      });
   }
-  next()
-}
+  next();
+};
 
 exports.deletePost = (req, res) => {
-  let post = req.post;
+  let post = req.posts;
+  console.log(req.post)
   post.remove((err, post) => {
-    if(err) {
-      return res.status(400).json({
-        error:err
-      })
-    }
-    res.json({
-      message: "Post has been deleted successfully"
-    })
-  })
-}
+      if (err) {
+          return res.status(400).json({
+              error: err
+          });
+      }
+      res.json({
+          message: 'Post deleted successfully'
+      });
+  });
+};

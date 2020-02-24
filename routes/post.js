@@ -17,9 +17,8 @@ router.param("userId", userById)
 // any routes containing :postID, app will execute postbyid()
 router.param("postID", postById)
 
-
 router.get("/posts/by/:userId", requireSignin, postsByUser)
 
-router.delete('/posts/:postId', requireSignin, isPoster, deletePost)
+router.delete('/post/:postId', requireSignin, deletePost);
 
-module.exports = router;  
+module.exports = router;
