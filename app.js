@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 8080;
 const morgan = require('morgan');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
@@ -11,39 +10,49 @@ const cookieParser = require('cookie-parser');
 dotenv.config()
 
 
-// //db connection
-mongoose.connect(process.env.MONGO_URI, {useUnifiedTopology: true, useNewUrlParser: true,})
-.then(() => console.log('DB Connected!'))
+mongoose
+    .connect(process.env.MONGO_URI, {
+        useNewUrlParser: true
+    })
+    .then(() => console.log('DB Connected'));
 
-//If there is an error loading the database, display error
 mongoose.connection.on('error', err => {
-  console.log(`connection error ${err.message}`);
+    console.log(`DB connection error: ${err.message}`);
 });
 
-//Loading Routes
-const postRoutes = require('./routes/post')
-const authRoutes = require('./routes/auth')
-const userRoutes = require('./routes/user')
+// bring in routes
+const postRoutes = require('./routes/post');
+const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
+// apiDocs
+app.get('/api', (req, res) => {
+    fs.readFile('docs/apiDocs.json', (err, data) => {
+        if (err) {
+            res.status(400).json({
+                error: err
+            });
+        }
+        const docs = JSON.parse(data);
+        res.json(docs);
+    });
+});
 
-//Middleware doing something inbetween
+// middleware -
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(expressValidator());
-
-//Middleware error Handling for unauthorized access 
-app.use(function (err, req, res, next) {
-  if (err.name === 'UnauthorizedError') {
-    res.status(401).send('invalid token...');
-  }
+app.use(cors());
+app.use('/api', postRoutes);
+app.use('/api', authRoutes);
+app.use('/api', userRoutes);
+app.use(function(err, req, res, next) {
+    if (err.name === 'UnauthorizedError') {
+        res.status(401).json({ error: 'Unauthorized!' });
+    }
 });
 
-//Rendering Root Page using middleware
-app.use("/", postRoutes);
-app.use("/", authRoutes);
-app.use("/", userRoutes);
-
-//Listening to Port 8080
+const port = process.env.PORT || 8080;
 app.listen(port, () => {
-  console.log(`Listening to port ${port}`);
+    console.log(`A Node Js API is listening on port: ${port}`);
 });
