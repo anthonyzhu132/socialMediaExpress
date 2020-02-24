@@ -1,5 +1,5 @@
 const express = require('express')
-const {getPosts, createPosts, postsByUser} = require('../controllers/post')
+const {getPosts, createPosts, postsByUser, postById} = require('../controllers/post')
 const router = express.Router()
 const { requireSignin } = require('../controllers/auth')
 const { createsPostValidator } = require('../Valdation');
@@ -14,6 +14,11 @@ router.post('/post/new/:userId', requireSignin, createPosts, createsPostValidato
 // any routes containing :userId, app will execute userbyid()
 router.param("userId", userById)
 
+// any routes containing :postID, app will execute postbyid()
+router.param("postID", postById)
+
+
 router.get("/posts/by/:userId", requireSignin, postsByUser)
 
-module.exports = router;
+router.delete('/posts/:postId')
+module.exports = router;  
