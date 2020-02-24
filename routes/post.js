@@ -1,24 +1,49 @@
-const express = require('express')
-const {getPosts, createPosts, postsByUser, postById, isPoster, deletePost} = require('../controllers/post')
-const router = express.Router()
-const { requireSignin } = require('../controllers/auth')
-const { createsPostValidator } = require('../Valdation');
-const { userById } = require('../controllers/user')
+const express = require('express');
+const {
+    getPosts,
+    createPost,
+    postsByUser,
+    postById,
+    isPoster,
+    updatePost,
+    deletePost,
+    photo,
+    singlePost,
+    like,
+    unlike,
+    comment,
+    uncomment,
+    updateComment
+} = require('../controllers/post');
+const { requireSignin } = require('../controllers/auth');
+const { userById } = require('../controllers/user');
+const { createPostValidator } = require('../validator');
 
-//Loading root page and getting posts
-router.get('/', getPosts)
+const router = express.Router();
 
-//Posting post information from frontend to backend
-router.post('/post/new/:userId', requireSignin, createPosts, createsPostValidator)
+router.get('/posts', getPosts);
 
-// any routes containing :userId, app will execute userbyid()
-router.param("userId", userById)
+// like unlike
+router.put('/post/like', requireSignin, like);
+router.put('/post/unlike', requireSignin, unlike);
 
-// any routes containing :postID, app will execute postbyid()
-router.param("postID", postById)
+// comments
+router.put('/post/comment', requireSignin, comment);
+router.put('/post/uncomment', requireSignin, uncomment);
+router.put('/post/updatecomment', requireSignin, updateComment);
 
-router.get("/posts/by/:userId", requireSignin, postsByUser)
+// post routes
+router.post('/post/new/:userId', requireSignin, createPost, createPostValidator);
+router.get('/posts/by/:userId', requireSignin, postsByUser);
+router.get('/post/:postId', singlePost);
+router.put('/post/:postId', requireSignin, isPoster, updatePost);
+router.delete('/post/:postId', requireSignin, isPoster, deletePost);
+// photo
+router.get('/post/photo/:postId', photo);
 
-router.delete('/post/:postId', requireSignin, deletePost);
+// any route containing :userId, our app will first execute userById()
+router.param('userId', userById);
+// any route containing :postId, our app will first execute postById()
+router.param('postId', postById);
 
 module.exports = router;
